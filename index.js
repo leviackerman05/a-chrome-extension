@@ -3,13 +3,21 @@ let inputEl = document.getElementById("input-el");
 let inputBtn = document.getElementById("input-btn");
 let ulEl = document.getElementById("ul-el");
 let deleteBtn = document.getElementById("delete-btn");
-
+let tabBtn = document.getElementById("tab-btn");
 let leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"));
 
 if (leadsFromLocalStorage) {
   myLeads = leadsFromLocalStorage;
   render(myLeads);
 }
+
+tabBtn.addEventListener("click", function () {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    myLeads.push(tabs[0].url);
+    localStorage.setItem("myLeads", JSON.stringify(myLeads));
+    render(myLeads);
+  });
+});
 
 function render(leads) {
   let listItems = "";
